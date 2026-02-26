@@ -1,3 +1,12 @@
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_subnet" "default" {
+  for_each = toset(data.aws_vpcs.default.subnet_ids) // Retrieve all default subnets
+   id = each.value
+}
+
 resource "aws_instance" "docker" {
   ami           = local.ami_id
   #instance_type = "t3.micro"
